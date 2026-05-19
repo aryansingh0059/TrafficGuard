@@ -1,0 +1,27 @@
+# Environment files and credentials
+.env
+.env.*
+*.local
+backend/.env
+frontend/.env
+
+# Node and package dependencies
+node_modules/
+backend/vendor/
+frontend/dist/
+frontend/dist-ssr/
+
+# Local logs and database caches
+*.log
+.phpunit.result.cache
+/public/storage
+/public/build
+/public/hot
+
+# System files and IDE configurations
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+.fleet/
+.zed/

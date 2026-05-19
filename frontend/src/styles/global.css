@@ -1,0 +1,74 @@
+@layer components {
+  /* Layout Primitives */
+  .gov-card {
+    @apply bg-white border border-border rounded p-5 shadow-sm;
+  }
+
+  /* Form Primitives */
+  .gov-form-label {
+    @apply block text-[13px] font-bold text-primary uppercase tracking-[2px] mb-1.5;
+  }
+  .gov-form-label.required::after {
+    content: " *";
+    @apply text-danger;
+  }
+  
+  .gov-form-input {
+    @apply w-full h-[40px] bg-surface px-3 py-2 border border-border rounded text-[14px] text-gray-900 focus:border-primary focus:border-l-[3px] focus:ring-0 outline-none transition-all placeholder:text-gray-400 font-medium;
+  }
+  .gov-form-input.error {
+    @apply border-danger focus:border-danger focus:border-l-[3px];
+  }
+
+  .gov-form-error {
+    @apply text-[12px] text-danger font-medium mt-1.5 flex items-center gap-1;
+  }
+
+  /* Button Primitives */
+  .gov-btn {
+    @apply h-[36px] px-4 rounded font-medium text-[14px] flex items-center justify-center gap-2 transition-all active:scale-[0.98] outline-none;
+  }
+
+  .gov-btn-primary {
+    @apply gov-btn bg-primary text-white hover:bg-primary-light border border-transparent;
+  }
+
+  .gov-btn-outline, .gov-btn-secondary {
+    @apply gov-btn bg-transparent text-primary border border-primary hover:bg-primary/5;
+  }
+
+  .gov-btn-danger {
+    @apply gov-btn bg-danger text-white hover:bg-red-800 border border-transparent;
+  }
+
+  .gov-btn:disabled, .gov-btn-disabled {
+    @apply bg-gray-300 text-gray-500 border-transparent cursor-not-allowed hover:bg-gray-300 active:scale-100;
+  }
+
+  /* Badges */
+  .gov-badge {
+    @apply px-2 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider;
+  }
+  .gov-badge-critical { @apply gov-badge bg-danger text-white; }
+  .gov-badge-high { @apply gov-badge bg-warning text-white; }
+  .gov-badge-medium { @apply gov-badge bg-accent text-white; }
+  .gov-badge-low { @apply gov-badge bg-success text-white; }
+}
+
+@layer utilities {
+  /* Accessibility: Focus Visible */
+  *:focus-visible {
+    outline: 2px dashed #1a3a5c !important;
+    outline-offset: 2px !important;
+  }
+
+  /* Accessibility: Skip to Content */
+  .skip-to-content {
+    @apply absolute -top-10 left-4 bg-primary text-white px-4 py-2 z-[9999] font-bold rounded-b focus:top-0 transition-all;
+  }
+
+  /* Table Hover Transition */
+  .gov-table-row {
+    @apply transition-colors duration-150 ease-in-out hover:bg-primary/5;
+  }
+}

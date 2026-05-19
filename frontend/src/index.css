@@ -1,0 +1,22 @@
+@import './styles/global.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+}
+
+@keyframes pulse-amber {
+  0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7); }
+  70% { box-shadow: 0 0 0 20px rgba(245, 158, 11, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+}
+
+.pulse-warning-zone {
+  border-radius: 50%;
+  background-color: rgba(245, 158, 11, 0.4);
+  border: 2px solid #f59e0b;
+  animation: pulse-amber 2s infinite;
+}
