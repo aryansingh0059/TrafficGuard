@@ -2,7 +2,7 @@
 
 TrafficGuard is a premium, state-of-the-art Government-to-Citizen (G2C) and Government-to-Government (G2G) dispatch and analytics platform. Built to facilitate real-time accident reporting, hazard logging, and intelligent queue management across India, the system connects everyday citizens directly with local traffic dispatch officers.
 
-Featuring **role-based dashboards**, **interactive geospatial mapping**, **Nominatim geocoding analytics**, and **AI-powered incident severity prediction**, TrafficGuard aims to significantly reduce response times and make Indian roads safer.
+Featuring **role-based dashboards**, **interactive geospatial mapping**, **Nominatim geocoding analytics**, **custom voice-guided startup sequences**, and **AI-powered incident severity prediction**, TrafficGuard aims to significantly reduce response times and make Indian roads safer.
 
 ---
 
