@@ -134,4 +134,22 @@ class AnalyticsController extends BaseController
 
         return $this->successResponse($data);
     }
+
+    public function byStatus(Request $request)
+    {
+        $query = Incident::query();
+        $this->applyDateFilter($query, $request);
+
+        $data = $query->select('status as name', DB::raw('COUNT(*) as value'))
+            ->groupBy('status')
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'name' => $item->name,
+                    'value' => $item->value
+                ];
+            });
+
+        return $this->successResponse($data);
+    }
 }

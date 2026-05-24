@@ -52,4 +52,9 @@ class User extends Authenticatable implements MustVerifyEmail
             'password' => 'hashed',
         ];
     }
+
+    public function incidents()
+    {
+        return $this->hasMany(Incident::class, 'reported_by');
+    }
 }

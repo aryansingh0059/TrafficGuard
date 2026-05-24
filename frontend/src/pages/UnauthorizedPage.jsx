@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import useAuthStore from '../store/authStore';
+import { logoutUser } from '../services/authService';
 
 const UnauthorizedPage = () => {
   const { user, logout } = useAuthStore();
@@ -8,9 +9,15 @@ const UnauthorizedPage = () => {
   const role = user?.role ?? 'unknown';
   const dashboardPath = role === 'admin' ? '/admin/dashboard' : role === 'public_user' ? '/user/dashboard' : '/login';
 
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
+  const handleLogout = async () => {
+    try {
+      await logoutUser();
+    } catch (e) {
+      // Ignore errors, clear state locally
+    } finally {
+      logout();
+      navigate('/login');
+    }
   };
 
   return (

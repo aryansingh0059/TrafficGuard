@@ -62,6 +62,23 @@ Route::prefix('v1')->group(function () {
             if ($request->filled('role')) {
                 $query->role($request->role);
             }
+            if ($request->get('sort') === 'incidents_count') {
+                $query->withCount('incidents')
+                    ->orderByDesc('incidents_count');
+                if ($request->filled('limit')) {
+                    $query->limit((int)$request->limit);
+                }
+                $users = $query->get(['id', 'name', 'email', 'role', 'status', 'created_at']);
+                foreach ($users as $user) {
+                    $lastIncident = \App\Models\Incident::where('reported_by', $user->id)
+                        ->latest('created_at')
+                        ->first();
+                    $user->last_report_date = $lastIncident ? $lastIncident->created_at->toIso8601String() : null;
+                }
+                return response()->json([
+                    'data' => $users
+                ]);
+            }
             return response()->json([
                 'data' => $query->orderByDesc('created_at')
                     ->get(['id', 'name', 'email', 'role', 'status', 'created_at'])
@@ -105,9 +122,14 @@ Route::prefix('v1')->group(function () {
             Route::get('/by-type',      [App\Http\Controllers\Api\AnalyticsController::class, 'byType']);
             Route::get('/by-date',      [App\Http\Controllers\Api\AnalyticsController::class, 'byDate']);
             Route::get('/by-severity',  [App\Http\Controllers\Api\AnalyticsController::class, 'bySeverity']);
+            Route::get('/by-status',    [App\Http\Controllers\Api\AnalyticsController::class, 'byStatus']);
             Route::get('/hotspots',     [App\Http\Controllers\Api\AnalyticsController::class, 'hotspots']);
             Route::get('/response-time',[App\Http\Controllers\Api\AnalyticsController::class, 'responseTime']);
         });
+
+        // Reports (compile + AI synthesis)
+        Route::get('reports/compile',      [App\Http\Controllers\Api\ReportController::class, 'compile']);
+        Route::post('reports/synthesize',  [App\Http\Controllers\Api\ReportController::class, 'synthesize']);
 
         // AI / Reports
         Route::prefix('ai')->group(function () {
@@ -147,7 +169,7 @@ Route::prefix('v1')->group(function () {
         });
         Route::post('/incidents', [App\Http\Controllers\Api\IncidentController::class, 'store']);
         Route::get('/incidents/{incident}', function (\Illuminate\Http\Request $request, $id) {
-            $incident = \App\Models\Incident::where('user_id', $request->user()->id)->findOrFail($id);
+            $incident = \App\Models\Incident::where('reported_by', $request->user()->id)->findOrFail($id);
             return response()->json(['data' => $incident]);
         });
 

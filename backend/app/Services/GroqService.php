@@ -20,7 +20,7 @@ class GroqService
     /**
      * Sends a simple single-turn request to Groq API.
      */
-    private function makeRequest(string $systemPrompt, string $userMessage, int $maxTokens = 500): string
+    public function makeRequest(string $systemPrompt, string $userMessage, int $maxTokens = 500): string
     {
         $messages = [
             ['role' => 'system', 'content' => $systemPrompt],

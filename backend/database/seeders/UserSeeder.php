@@ -16,7 +16,8 @@ class UserSeeder extends Seeder
             [
                 'name' => 'System Admin',
                 'password' => Hash::make('password'),
-                'phone' => '1234567890'
+                'phone' => '1234567890',
+                'role' => 'admin'
             ]
         );
         $admin->assignRole('admin');
@@ -27,7 +28,8 @@ class UserSeeder extends Seeder
                 'name' => 'Officer ' . $i,
                 'email' => "officer{$i}@traffic.com",
                 'password' => Hash::make('password'),
-                'phone' => '987654321' . $i
+                'phone' => '987654321' . $i,
+                'role' => 'traffic_officer'
             ]);
             $officer->assignRole('traffic_officer');
         }
@@ -38,7 +40,8 @@ class UserSeeder extends Seeder
                 'name' => 'Public User ' . $i,
                 'email' => "user{$i}@traffic.com",
                 'password' => Hash::make('password'),
-                'phone' => '555123456' . $i
+                'phone' => '555123456' . $i,
+                'role' => 'public_user'
             ]);
             $public->assignRole('public_user');
         }

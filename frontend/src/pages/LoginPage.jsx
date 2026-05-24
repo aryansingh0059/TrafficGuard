@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import useAuthStore from '../store/authStore';
 import { loginUser } from '../services/authService';
 import { extractErrors, extractMessage } from '../utils/errorHelpers';
 import GovInputField from '../components/GovInputField';
 import ForgotPasswordModal from '../components/ForgotPasswordModal';
+import logoSrc from '../assets/logo.png';
 
 const TopBanner = () => (
   <div className="w-full bg-danger text-white text-xs py-2 px-4 flex items-center justify-center gap-2 font-medium z-50 relative">
@@ -16,20 +17,24 @@ const TopBanner = () => (
 );
 
 const Emblem = ({ className = "" }) => (
-  <div className={`w-[80px] h-[80px] rounded-full border-[3px] border-accent flex items-center justify-center bg-white/5 ${className}`}>
-    <svg className="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 24 24">
-      <path d="M12 2L3 6v6.5c0 5.05 3.81 9.85 9 11.5 5.19-1.65 9-6.45 9-11.5V6l-9-4zm0 2.18l7 3.12v5.2c0 4.08-2.82 8.01-7 9.51-4.18-1.5-7-5.43-7-9.51V7.3l7-3.12z" />
-    </svg>
-  </div>
+  <img
+    src={logoSrc}
+    alt="TrafficGuard"
+    className={`rounded-full object-cover border-4 border-accent/60 shadow-lg ${className}`}
+    style={{ width: 80, height: 80 }}
+  />
 );
 
 const LeftPanel = () => (
   <div className="hidden md:flex flex-col items-center justify-center w-[45%] bg-primary p-10 relative overflow-hidden text-center shrink-0">
     <Emblem className="mb-6" />
-    <h1 className="text-white text-[20px] font-bold uppercase tracking-wide leading-snug max-w-[80%] mb-1">
-      Traffic & Accident Management System
+    <h1 className="text-white text-[26px] font-black tracking-tight leading-none mb-1">
+      Traffic<span className="text-accent">Guard</span>
     </h1>
-    <h2 className="text-accent text-[13px] font-bold uppercase tracking-widest mb-10">
+    <p className="text-white/60 text-[12px] font-semibold uppercase tracking-widest mb-1">
+      Traffic &amp; Accident Management System
+    </p>
+    <h2 className="text-accent text-[11px] font-bold uppercase tracking-widest mb-10">
       Ministry of Road Transport
     </h2>
     
@@ -52,7 +57,7 @@ const LeftPanel = () => (
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const { login } = useAuthStore();
+  const { login, token, user } = useAuthStore();
 
   const [form, setForm] = useState({ email: '', password: '', remember: false });
   const [errors, setErrors] = useState({});
@@ -60,6 +65,13 @@ const LoginPage = () => {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showForgot, setShowForgot] = useState(false);
+
+  useEffect(() => {
+    if (token && user) {
+      const userRole = user.role ?? user.roles?.[0]?.name ?? 'public_user';
+      navigate(userRole === 'admin' ? '/admin/dashboard' : '/user/dashboard', { replace: true });
+    }
+  }, [token, user, navigate]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -76,7 +88,7 @@ const LoginPage = () => {
       const { data } = await loginUser({ email: form.email, password: form.password });
       const userData = data.data.user;
       const token = data.data.token;
-      login(userData, token);
+      login(userData, token, form.remember);
       // Role-based redirect
       const userRole = userData.role ?? userData.roles?.[0]?.name ?? 'public_user';
       navigate(userRole === 'admin' ? '/admin/dashboard' : '/user/dashboard', { replace: true });
@@ -131,9 +143,12 @@ const LoginPage = () => {
           {/* Mobile Header (Hidden on Desktop) */}
           <div className="md:hidden bg-primary p-6 flex flex-col items-center text-center">
             <Emblem className="mb-4 w-[60px] h-[60px]" />
-            <h1 className="text-white text-[16px] font-bold uppercase tracking-wide leading-snug">
-              Traffic & Accident Management System
+            <h1 className="text-white text-[18px] font-black tracking-tight leading-none">
+              Traffic<span className="text-accent">Guard</span>
             </h1>
+            <p className="text-white/60 text-[10px] font-semibold uppercase tracking-widest mt-0.5">
+              Accident Management System
+            </p>
           </div>
 
           <div className="flex-1 flex flex-col items-center justify-center p-6 sm:p-10">
